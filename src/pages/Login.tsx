@@ -29,17 +29,23 @@ const LoginPage = () => {
     setIsLoading(true)
 
     try {
-      const { status } = await axiosInstance.post('/auth/local/', data)
+      const { status, data: resData } = await axiosInstance.post('/auth/local/', data)
       if (status === 200)
-        toast.success('Registered successfully', { position: "bottom-center", duration: 4000, style: { backgroundColor: "black", color: 'white', width: "fit-content" } })
+        toast.success('Registered successfully', { position: "bottom-center", duration: 1500, style: { backgroundColor: "black", color: 'white', width: "fit-content" } })
 
+
+      localStorage.setItem('loggedInUser', JSON.stringify(resData))
     } catch (error) {
       const errorObj = error as AxiosError<IErrorResponse>
-      toast.error(errorObj.response?.data?.error.message || 'Something went wrong', { position: "bottom-center", duration: 4000, style: { backgroundColor: "black", color: 'white', width: "fit-content" } })
+      toast.error(errorObj.response?.data?.error.message || 'Something went wrong', { position: "bottom-center", duration: 1500, style: { backgroundColor: "black", color: 'white', width: "fit-content" } })
 
     } finally {
       setIsLoading(false)
     }
+
+    setInterval(() => {
+      location.replace('/')
+    }, 1500);
   }
 
   // ** Renders

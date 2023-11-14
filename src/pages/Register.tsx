@@ -13,6 +13,7 @@ import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import InputErrorMessage from "../components/InputErrorMessage";
 import Spinner from "../components/ui/Spinner";
+import { useNavigate } from "react-router-dom";
 
 interface IFormInput {
   username: string
@@ -24,6 +25,8 @@ const RegisterPage = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const navigate = useNavigate()
+
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>({ resolver: yupResolver(registerSchema) })
 
 
@@ -32,16 +35,20 @@ const RegisterPage = () => {
 
     try {
       const { status } = await axiosInstance.post('/auth/local/register', data)
-      if (status === 200)
-        toast.success('Registered successfully', { position: "bottom-center", duration: 4000, style: { backgroundColor: "black", color: 'white', width: "fit-content" } })
-
+      if (status === 200) {
+        toast.success('Registered successfully', { position: "bottom-center", duration: 1500, style: { backgroundColor: "black", color: 'white', width: "fit-content" } })
+      }
     } catch (error) {
       const errorObj = error as AxiosError<IErrorResponse>
-      toast.error(errorObj.response?.data?.error.message || 'Something went wrong', { position: "bottom-center", duration: 4000, style: { backgroundColor: "black", color: 'white', width: "fit-content" } })
+      toast.error(errorObj.response?.data?.error.message || 'Something went wrong', { position: "bottom-center", duration: 1500, style: { backgroundColor: "black", color: 'white', width: "fit-content" } })
 
     } finally {
       setIsLoading(false)
     }
+
+    setInterval(() => {
+      navigate('/login')
+    }, 1500);
   }
 
 
